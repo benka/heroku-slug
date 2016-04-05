@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'heroku-slug/heroku-slug'
+HerokuSlug::HerokuSlug.start
