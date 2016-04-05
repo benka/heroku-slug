@@ -3,14 +3,18 @@ module HerokuSlug
 
         class Request
 
-            def initialize(uri)
+            def initialize(uri, user, pwd)
                 @uri = uri
+                @user = user
+                @pwd = pwd
             end
 
             def create_get_request_header
                 req = Net::HTTP::Get.new(@uri)
+                req.basic_auth @user, @pwd
                 req.content_type = 'application/json'
-                #req.add_field 'X-Atlassian-Token' ,'nocheck'
+                #req.initialize_http_header({"Accept" => "application/vnd.heroku+json; version=3"})
+                req["Accept"] = "application/vnd.heroku+json, version=3"
                 return req
             end
 
@@ -35,7 +39,6 @@ module HerokuSlug
                 req.basic_auth @user, @pwd
                 req.content_type = 'application/json'
                 req.add_field 'X-Atlassian-Token' ,'nocheck'
-                #req.body = "test" #post if post
                 return req
             end 
         end
