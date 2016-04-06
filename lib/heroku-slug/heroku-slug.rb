@@ -21,10 +21,11 @@ module HerokuSlug
             heroku_app = options[:heroku_app]
             uriString = "https://api.heroku.com/apps/#{heroku_app}/releases"
             accept = '"Accept: application/vnd.heroku+json; version=3"'
+            order = '"Range: version ..; order=desc, max=10;"'
             uri = URI(uriString)
             puts "URI: #{uri}"
 
-            res = `curl -n --silent #{uriString} -H #{accept}`
+            res = `curl -n --silent #{uriString} -H #{accept} -H #{order}`
 
             result = JSON.parse(res)
 
@@ -32,8 +33,8 @@ module HerokuSlug
             ver = nil
             hash = nil
             result.each { |i|
-                #puts i
-                if i["slug"] && i["slug"]["id"] && i["slug"]["id"] != ""
+                puts i
+                if !id && i["slug"] && i["slug"]["id"] && i["slug"]["id"] != ""
                     id = i["slug"]["id"]
                     ver = i["version"]
                     hash = i["description"]
